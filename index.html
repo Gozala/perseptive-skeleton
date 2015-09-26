@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+
+    <div class='webview-stack'>
+
+      <div class='webview'>
+        <div class='webview-toolbar'>
+          <div class='webview-title-container'>
+            <div class='webview-security-icon'>x</div>
+            <div class='webview-title'>foobar</div>
+          </div>
+          <div class='webview-show-sidebar-button'></div>
+        </div>
+        <iframe class='webview-iframe' src='http://paulrouget.com'></iframe>
+      </div>
+
+      <div class='webview webview-selected'>
+        <div class='webview-toolbar'>
+          <div class='webview-title-container'>
+            <div class='webview-security-icon'>x</div>
+            <div class='webview-title'>foobar</div>
+          </div>
+          <div class='webview-show-sidebar-button'></div>
+        </div>
+        <iframe class='webview-iframe' src='http://paulrouget.com' mozbrowser></iframe>
+      </div>
+
+      <div class='webview'>
+        <div class='webview-toolbar'>
+          <div class='webview-title-container'>
+            <div class='webview-security-icon'>x</div>
+            <div class='webview-title'>foobar</div>
+          </div>
+          <div class='webview-show-sidebar-button'></div>
+        </div>
+        <iframe class='webview-iframe' src='http://paulrouget.com'>
+        </iframe>
+      </div>
+
+      <div class='webviews-overlay'></div>
+
+    </div>
+
+    <div class='dark-overlay'></div>
+
+    <div class='sidebar'>
+
+      <div class='sidebar-tabs-scrollbox'>
+
+        <div class='sidebar-tab'>
+          <img class='sidebar-tab-smallicon' src='assets/favicon1.png'>
+          <div class='sidebar-tab-title'>A Bicyclops Built For Two</div>
+        </div>
+
+        <div class='sidebar-tab'>
+          <img class='sidebar-tab-smallicon' src='assets/favicon2.png'>
+          <div class='sidebar-tab-title'>Love and Rocket</div>
+        </div>
+
+        <div class='sidebar-tab sidebar-tab-selected'>
+          <img class='sidebar-tab-smallicon' src='assets/favicon3.png'>
+          <div class='sidebar-tab-title'>A Clone of My Own</div>
+        </div>
+
+        <div class='sidebar-tab'>
+          <img class='sidebar-tab-smallicon' src='assets/favicon1.png'>
+          <div class='sidebar-tab-title'>Crimes of the Hot</div>
+        </div>
+
+
+      </div>
+
+      <div class='sidebar-toolbar'>
+        <div class='sidebar-toolbar-left-buttons'>
+          <div class='sidebar-toolbar-button sidebar-toolbar-pin-button'></div>
+        </div>
+        <div class='sidebar-toolbar-right-buttons'>
+          <div class='sidebar-toolbar-button sidebar-toolbar-plus-button'></div>
+        </div>
+      </div>
+
+    </div>
+
+    <script src='main.js' defer></script>
+  </body>
+</html>
