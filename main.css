@@ -5,12 +5,12 @@
    * could be replaced by a build-time variable, or a JS variable.
    */
 
+  /* Vim Macro to expand variables: "ayt:W"byt;:%s/var(^Raa<80>kb)/^Rba<80>kb/g^M'' */
+
   --webview-topbar-height: 27px;
   --webview-expended-topbar-height: 50vh;
   --webview-combobox-height: 18px;
   --webview-combobox-width: 300px;
-
-  --ui-font: 12px/1.5 "Helvetica Neue", sans-serif;
 
   --sidebar-toolbar-height: 50px;
 
@@ -28,7 +28,7 @@ body {
   height: 100vh;
 
   background-color: #263340;
-  font: var(--ui-font);
+  font: 12px/1.5 "Helvetica Neue", sans-serif;
   perspective: 2000px;
 }
 
