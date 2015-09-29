@@ -3,6 +3,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="main.css">
+    <meta charset='utf8'>
   </head>
   <body class='mode-show-webview'>
 
@@ -10,11 +11,11 @@
 
       <div class='webview webview-selected'>
         <!-- todo: add multiple webviews -->
-        <iframe class='webview-iframe' src='http://paulrouget.com'></iframe>
+        <iframe mozbrowser class='webview-iframe' src='http://paulrouget.com'></iframe>
         <!-- topbar comes next. It can cover the iframe -->
         <div class='webview-local-overlay'></div>
         <div class='webview-topbar'>
-          <!-- Why not one single topbar?
+          <!-- Why not one single global topbar?
             . doesn't require to udpate topbar/urlbar on tab switch
             . in the overview mode, views fade in and out, so 2 views
               and their topbars can be visible at the same time
@@ -25,13 +26,28 @@
             <div class='webview-title-container'>
               <!-- it's important that the 2 inline elements are not separated
               by a new line to avoid the 4px ghost margins -->
-              <span class='webview-security-icon'>L</span><span class='webview-title'>A Title!</span>
+              <span class='webview-security-icon'>L</span><span class='webview-title'>Paul Rouget Blog</span>
             </div>
 
-            <input class='webview-url-input' value='http://url.com/foo/bar.html' type='text'>
+            <input class='webview-url-input' value='http://paulrouget.com/foo/bar.html' type='text'>
 
           </div>
 
+          <div class='webview-show-sidebar-button'></div>
+        </div>
+      </div>
+
+      <div class='webview'> <!-- a clone of the other webview, without the selected class -->
+        <iframe mozbrowser class='webview-iframe' src='http://paulrouget.com/e/simpsons/'></iframe>
+        <div class='webview-local-overlay'></div>
+        <div class='webview-topbar'>
+          <div class='webview-topbar-background'></div>
+          <div class='webview-combobar'>
+            <div class='webview-title-container'>
+              <span class='webview-security-icon'>U</span><span class='webview-title'>GitHub</span>
+            </div>
+            <input class='webview-url-input' value='https://github.com/foobar.html' type='text'>
+          </div>
           <div class='webview-show-sidebar-button'></div>
         </div>
       </div>
@@ -70,6 +86,14 @@
       <script>
         function mode(m) {
           document.body.className = 'mode-' + m;
+          if (m == 'select-webview') {
+            setTimeout(() => {
+              var a = document.querySelector('.webview.webview-selected')
+              var b = document.querySelector('.webview:not(.webview-selected)')
+              a.classList.toggle('webview-selected');
+              b.classList.toggle('webview-selected');
+            }, 500);
+          }
         }
       </script>
     </div>

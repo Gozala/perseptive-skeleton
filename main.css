@@ -76,6 +76,10 @@ body {
   width: 100%;
   height: 100%;
 
+  transition-duration: 200ms;
+  transition-timing-function: var(--default-timing-function);
+  transition-property: visibility, opacity;
+
   -moz-user-select: none;
   cursor: default;
 }
@@ -83,6 +87,7 @@ body {
 .webview:not(.webview-selected) {
   pointer-events: none;
   visibility: hidden;
+  opacity: 0;
 }
 
 .webview-iframe {
@@ -185,6 +190,7 @@ body {
 
 /** WEBVIEWS: MODES **/
 
+.mode-select-webview .webview-stack,
 .mode-show-tabs .webview-stack {
   transform: translate3d(0px, 0, -600px);
 }
@@ -329,5 +335,3 @@ body {
 .mode-show-tabs .sidebar {
   transform: translateX(0);
 }
-
-
