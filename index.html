@@ -4,75 +4,49 @@
   <head>
     <link rel="stylesheet" href="main.css">
   </head>
-  <body>
+  <body class='mode-show-webview'>
 
     <div class='webview-stack'>
 
-      <div class='webview'>
-        <div class='webview-toolbar'>
-          <div class='webview-title-container'>
-            <div class='webview-security-icon'>x</div>
-            <div class='webview-title'>foobar</div>
-          </div>
-          <div class='webview-show-sidebar-button'></div>
-        </div>
-        <iframe class='webview-iframe' src='http://paulrouget.com'></iframe>
-      </div>
-
       <div class='webview webview-selected'>
-        <div class='webview-toolbar'>
-          <div class='webview-title-container'>
-            <div class='webview-security-icon'>x</div>
-            <div class='webview-title'>foobar</div>
+        <!-- todo: add multiple webviews -->
+        <iframe class='webview-iframe' src='http://paulrouget.com'></iframe>
+        <!-- topbar comes next. It can cover the iframe -->
+        <div class='webview-local-overlay'></div>
+        <div class='webview-topbar'>
+          <!-- Why not one single topbar?
+            . doesn't require to udpate topbar/urlbar on tab switch
+            . in the overview mode, views fade in and out, so 2 views
+              and their topbars can be visible at the same time
+          -->
+          <div class='webview-topbar-background'></div>
+          <div class='webview-combobar'>
+
+            <div class='webview-title-container'>
+              <!-- it's important that the 2 inline elements are not separated
+              by a new line to avoid the 4px ghost margins -->
+              <span class='webview-security-icon'>L</span><span class='webview-title'>A Title!</span>
+            </div>
+
+            <input class='webview-url-input' value='http://url.com/foo/bar.html' type='text'>
+
           </div>
+
           <div class='webview-show-sidebar-button'></div>
         </div>
-        <iframe class='webview-iframe' src='http://paulrouget.com' mozbrowser></iframe>
       </div>
-
-      <div class='webview'>
-        <div class='webview-toolbar'>
-          <div class='webview-title-container'>
-            <div class='webview-security-icon'>x</div>
-            <div class='webview-title'>foobar</div>
-          </div>
-          <div class='webview-show-sidebar-button'></div>
-        </div>
-        <iframe class='webview-iframe' src='http://paulrouget.com'>
-        </iframe>
-      </div>
-
-      <div class='webviews-overlay'></div>
 
     </div>
 
-    <div class='dark-overlay'></div>
+    <div class='global-overlay'></div>
 
     <div class='sidebar'>
 
       <div class='sidebar-tabs-scrollbox'>
-
-        <div class='sidebar-tab'>
-          <img class='sidebar-tab-smallicon' src='assets/favicon1.png'>
-          <div class='sidebar-tab-title'>A Bicyclops Built For Two</div>
-        </div>
-
-        <div class='sidebar-tab'>
-          <img class='sidebar-tab-smallicon' src='assets/favicon2.png'>
-          <div class='sidebar-tab-title'>Love and Rocket</div>
-        </div>
-
-        <div class='sidebar-tab sidebar-tab-selected'>
-          <img class='sidebar-tab-smallicon' src='assets/favicon3.png'>
-          <div class='sidebar-tab-title'>A Clone of My Own</div>
-        </div>
-
-        <div class='sidebar-tab'>
-          <img class='sidebar-tab-smallicon' src='assets/favicon1.png'>
-          <div class='sidebar-tab-title'>Crimes of the Hot</div>
-        </div>
-
-
+        <div class='sidebar-tab'><img class='sidebar-tab-smallicon' src='assets/favicon1.png'><div class='sidebar-tab-title'>A Bicyclops Built For Two</div></div>
+        <div class='sidebar-tab'><img class='sidebar-tab-smallicon' src='assets/favicon2.png'><div class='sidebar-tab-title'>Love and Rocket</div></div>
+        <div class='sidebar-tab sidebar-tab-selected'><img class='sidebar-tab-smallicon' src='assets/favicon3.png'><div class='sidebar-tab-title'>A Clone of My Own</div></div>
+        <div class='sidebar-tab'><img class='sidebar-tab-smallicon' src='assets/favicon1.png'><div class='sidebar-tab-title'>Crimes of the Hot</div></div>
       </div>
 
       <div class='sidebar-toolbar'>
@@ -86,6 +60,19 @@
 
     </div>
 
-    <script src='main.js' defer></script>
+    <!-- ignore -->
+    <div style='position: absolute; bottom: 20px; left: 20px'>
+      <button onclick='mode("show-webview")'>show-webview</button>
+      <button onclick='mode("show-tabs")'>show-tabs</button>
+      <button onclick='mode("select-webview")'>select-webview</button>
+      <button onclick='mode("edit-webview")'>edit-webview</button>
+      <button onclick='mode("create-webview")'>create-webview</button>
+      <script>
+        function mode(m) {
+          document.body.className = 'mode-' + m;
+        }
+      </script>
+    </div>
+
   </body>
 </html>

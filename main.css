@@ -2,38 +2,71 @@
   /*
    * We use variables when more than one property depend on them.
    * If not used within a calc involving a non-pixel unit, these
-   * could be replaced by a build-time variable.
+   * could be replaced by a build-time variable, or a JS variable.
    */
-  --webview-toolbar-height: 27px;
-  --sidebar-toolbar-height: 50px;
-  --webview-toolbar-title-height: 18px;
+
+  --webview-topbar-height: 27px;
+  --webview-expended-topbar-height: 50vh;
+  --webview-combobox-height: 18px;
+  --webview-combobox-width: 300px;
+
   --ui-font: 12px/1.5 "Helvetica Neue", sans-serif;
+
+  --sidebar-toolbar-height: 50px;
+
+  --default-transition-duration: 400ms;
+  --default-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  --default-transform-transition: transform var(--default-transition-duration) var(--default-transition-timing-function);
+  --default-opacity-transition: opacity var(--default-transition-duration) var(--default-transition-timing-function);
+
 }
 
 body {
   margin: 0;
-  background-color: #263340;
-  font: var(--ui-font);
-
   overflow: hidden; /* necessary to prevent the off-screen sidebar to create an overflow */
   width: 100vw;
   height: 100vh;
 
+  background-color: #263340;
+  font: var(--ui-font);
   perspective: 2000px;
 }
 
-.webview-stack {
-  position: absolute; /* to position webviews relatively to stack */
-  width: 100vw;
-  height: 100vh;
-  -x-border-radius: 4px; /* WARNING: will slow down animations! (gecko) */
-  overflow: hidden; /* necessary to clip the radius */
-  transition: transform 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
-  will-change: transform;
+.global-overlay,
+.webview-local-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  transition: var(--default-opacity-transition);
+  opacity: 0;
+
+  background-color: rgba(0,0,0,0.11);
 }
 
-.mode2 .webview-stack {
-  transform: translate3d(0px, 0, -600px);
+.mode-show-tabs .global-overlay,
+.mode-edit-webview .webview-local-overlay {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/** WEBVIEWS **/
+
+.webview-stack {
+  position: absolute; /* to position webviews relatively to stack */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  transition: var(--default-transform-transition);
+  will-change: transform;
+
+  -x-border-radius: 4px; /* WARNING: will slow down animations! (gecko) */
+  overflow: hidden; /* necessary to clip the radius */
 }
 
 .webview {
@@ -42,6 +75,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+
   -moz-user-select: none;
   cursor: default;
 }
@@ -52,80 +86,128 @@ body {
 }
 
 .webview-iframe {
-  display: block;
-  -moz-user-select: none; /* necessary to pass text drag to iframe's content */
-  border-width: 0;
+  display: block; /* iframe are inline by default */
+  position: absolute;
+  top: var(--webview-topbar-height);
+  left: 0;
   width: 100%;
-  height: calc(100% - var(--webview-toolbar-height));
+  height: calc(100% - var(--webview-topbar-height));
+  -moz-user-select: none; /* necessary to pass text drag to iframe's content */
+
+  border-width: 0;
   background-color: white;
 }
 
-.webview-toolbar {
+.webview-topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: var(--webview-toolbar-height);
-  background: white; /* dynamic */
-  text-align: center;
+  height: var(--webview-topbar-height);
 }
 
-.webview-title-container {
-  display: inline-block; /* for alignment */
-  font-size: 0; /* necessary to avoid the annoying inline horizontal space */
-  width: 250px;
-  height: var(--webview-toolbar-title-height);
-  margin-top: calc(var(--webview-toolbar-height) / 2 - var(--webview-toolbar-title-height) / 2);
-  font-weight: bold;
+.webview-topbar-background {
+  position: absolute;
+  height: var(--webview-expended-topbar-height);
+  width: 100%;
+  top: 0;
+  left: 0;
+  transform: translateY(calc(-1 * var(--webview-expended-topbar-height) + var(--webview-topbar-height)));
+
+  transition: var(--default-transform-transition);
+
+  background-color: #FFFFFF; /* dynamic */
+}
+
+.webview-combobar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: var(--webview-combobox-height);
+  width: var(--webview-combobox-width);
+  margin-top: calc(var(--webview-topbar-height) / 2 - var(--webview-combobox-height) / 2);
+  margin-left: calc(var(--webview-combobox-width) / -2);
+
+  transition-duration: var(--default-transition-duration);
+  transition-timing-function: var(--default-timing-function);
+  transition-property: transform, background-color;
+
   color: rgba(0, 0, 0, 0.8);
-  transition: background 100ms ease-out;
   border-radius: 5px;
   cursor: text;
 }
 
-.webview-title-container:hover {
-  background: rgba(0, 0, 0, 0.06);
+.webview-combobar:hover {
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
-.webview-title-container > * {
-  font-size: 12px;
-  line-height: var(--webview-toolbar-title-height);
+
+.webview-title-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+
+  transition: var(--default-opacity-transition);
+
+  font-weight: bold;
 }
 
-.webview-security-icon {
-  display: inline-block;
-  width: 18px;
-}
+.webview-url-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-.webview-title {
-  display: inline;
+  transition: var(--default-opacity-transition);
+
+  -moz-appearance: none;
+  border-width: 0;
+  background: transparent;
+  opacity: 0;
+  padding: 0;
 }
 
 .webview-show-sidebar-button {
   position: absolute;
   top: 0;
   right: 0;
-  height: var(--webview-toolbar-height);
-  width: var(--webview-toolbar-height);
+  height: var(--webview-topbar-height);
+  width: var(--webview-topbar-height);
+
   background-image: url(assets/hamburger.png);
   background-size: 14px 14px;
   background-repeat: no-repeat;
   background-position: center center;
 }
 
-.dark-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
+/** WEBVIEWS: MODES **/
+
+.mode-show-tabs .webview-stack {
+  transform: translate3d(0px, 0, -600px);
 }
 
-.mode2 .dark-overlay {
-  opacity: 0.1;
-  pointer-events: all;
+.mode-edit-webview .webview-topbar-background {
+  transform: translateY(0);
 }
+
+.mode-edit-webview .webview-combobar {
+  transform: translateY(50px) scale(2);
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.mode-edit-webview .webview-title-container {
+  opacity: 0;
+}
+
+.mode-edit-webview .webview-url-input {
+  opacity: 1;
+}
+
+
+/** SIDEBAR **/
 
 .sidebar {
   position: absolute;
@@ -133,24 +215,23 @@ body {
   top: 0;
   height: 100vh;
   width: 410px;
-  transform: translateX(560px);
-  transition: transform 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  transform: translateX(560px); /* larger than sidebar width to hide shadow */
+
+  transition: var(--default-transform-transition);
+
   background-color: #2E3D4D;
   -x-box-shadow: rgba(0, 0, 0, 0.5) -80px 0 100px; /* WARNING: will slow down animations! (gecko) */
 }
 
-.sidebar:after {
+.sidebar::after { /* sidebar left border */
   width: 4px;
   height: 100%;
-  background-color: rgba(0,0,0,0.11);
   position: absolute;
   top: 0;
   left: 0;
   content: '';
-}
 
-.mode2 .sidebar {
-  transform: translateX(0);
+  background-color: rgba(0,0,0,0.11);
 }
 
 .sidebar-toolbar {
@@ -158,30 +239,39 @@ body {
   bottom: 0;
   width: 100%;
   height: var(--sidebar-toolbar-height);
+
   background-color: #364759;
 }
 
-.sidebar-toolbar-left-buttons {
+.sidebar-toolbar-left-buttons,
+.sidebar-toolbar-right-buttons {
   position: absolute;
-  left: 0;
   height: 100%;
+
   background-color: #3E5166;
 }
 
+.sidebar-toolbar-left-buttons {
+  left: 0;
+}
+
 .sidebar-toolbar-right-buttons {
-  position: absolute;
   right: 0;
-  height: 100%;
-  background-color: #3E5166;
 }
 
 .sidebar-toolbar-button {
   height: 100%;
   width: var(--sidebar-toolbar-height);
-  background-size: 12.5px;
+
+  transition: background-color 200ms ease-out;
+
+  background-size: 12.5px; /* depends on PNG dimensions */
   background-repeat: no-repeat;
   background-position: center center;
-  transition: background-color 200ms ease-out;
+}
+
+.sidebar-toolbar-left-buttons > .sidebar-toolbar-button:first-of-type {
+  padding-left: 4px; /* 4px for sidebar left border */
 }
 
 .sidebar-toolbar-button:hover {
@@ -190,7 +280,6 @@ body {
 
 .sidebar-toolbar-pin-button {
   background-image: url(assets/pin.png);
-  width: calc(var(--sidebar-toolbar-height) + 4px);
 }
 
 .sidebar-toolbar-plus-button {
@@ -204,11 +293,12 @@ body {
 }
 
 .sidebar-tab {
-  border-left: 4px solid transparent;
-  color: #DDD;
-  font-size: 14px;
   padding: 0 15px;
   line-height: 50px;
+  border-left: 4px solid transparent;
+
+  color: #DDD;
+  font-size: 14px;
 }
 
 .sidebar-tab > * {
@@ -227,6 +317,7 @@ body {
 .sidebar-tab-smallicon {
   width: 16px;
   height: 16px;
+
   background: white;
   border-radius: 3px;
 }
@@ -234,3 +325,9 @@ body {
 .sidebar-tab-title {
   display: inline;
 }
+
+.mode-show-tabs .sidebar {
+  transform: translateX(0);
+}
+
+
