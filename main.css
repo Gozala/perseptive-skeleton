@@ -77,7 +77,7 @@ body {
   height: 100%;
 
   transition-duration: 200ms;
-  transition-timing-function: var(--default-timing-function);
+  transition-timing-function: var(--default-transition-timing-function);
   transition-property: visibility, opacity;
 
   -moz-user-select: none;
@@ -134,7 +134,7 @@ body {
   margin-left: calc(var(--webview-combobox-width) / -2);
 
   transition-duration: var(--default-transition-duration);
-  transition-timing-function: var(--default-timing-function);
+  transition-timing-function: var(--default-transition-timing-function);
   transition-property: transform, background-color;
 
   color: rgba(0, 0, 0, 0.8);
