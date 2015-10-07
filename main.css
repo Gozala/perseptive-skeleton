@@ -16,9 +16,14 @@
 
   --default-transition-duration: 400ms;
   --default-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-  --default-transform-transition: transform var(--default-transition-duration) var(--default-transition-timing-function);
-  --default-opacity-transition: opacity var(--default-transition-duration) var(--default-transition-timing-function);
+  --default-transform-transition: transform 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  --default-opacity-transition: opacity 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
 
+}
+
+div {
+  /* Temporary fix for servo/servo#7779 */
+  transform: scale(1);
 }
 
 body {
@@ -41,7 +46,7 @@ body {
   height: 100%;
   pointer-events: none;
 
-  transition: var(--default-opacity-transition);
+  transition: opacity 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
   opacity: 0;
 
   background-color: rgba(0,0,0,0.11);
@@ -62,7 +67,7 @@ body {
   width: 100vw;
   height: 100vh;
 
-  transition: var(--default-transform-transition);
+  transition: transform 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
   will-change: transform;
 
   -x-border-radius: 4px; /* WARNING: will slow down animations! (gecko) */
@@ -77,7 +82,7 @@ body {
   height: 100%;
 
   transition-duration: 200ms;
-  transition-timing-function: var(--default-transition-timing-function);
+  transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   transition-property: visibility, opacity;
 
   -moz-user-select: none;
@@ -93,10 +98,10 @@ body {
 .webview-iframe {
   display: block; /* iframe are inline by default */
   position: absolute;
-  top: var(--webview-topbar-height);
+  top: 27px;
   left: 0;
   width: 100%;
-  height: calc(100% - var(--webview-topbar-height));
+  height: calc(100% - 27px);
   -moz-user-select: none; /* necessary to pass text drag to iframe's content */
 
   border-width: 0;
@@ -108,18 +113,19 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: var(--webview-topbar-height);
+  height: 27px;
 }
+
 
 .webview-topbar-background {
   position: absolute;
-  height: var(--webview-expended-topbar-height);
+  height: 50vh;
   width: 100%;
   top: 0;
   left: 0;
-  transform: translateY(calc(-1 * var(--webview-expended-topbar-height) + var(--webview-topbar-height)));
+  transform: translateY(calc(-1 * 50vh + 27px));
 
-  transition: var(--default-transform-transition);
+  transition: transform 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
 
   background-color: #FFFFFF; /* dynamic */
 }
@@ -128,13 +134,13 @@ body {
   position: absolute;
   left: 50%;
   top: 0;
-  height: var(--webview-combobox-height);
-  width: var(--webview-combobox-width);
-  margin-top: calc(var(--webview-topbar-height) / 2 - var(--webview-combobox-height) / 2);
-  margin-left: calc(var(--webview-combobox-width) / -2);
+  height: 18px;
+  width: 300px;
+  margin-top: calc(27px / 2 - 18px / 2);
+  margin-left: calc(300px / -2);
 
-  transition-duration: var(--default-transition-duration);
-  transition-timing-function: var(--default-transition-timing-function);
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   transition-property: transform, background-color;
 
   color: rgba(0, 0, 0, 0.8);
@@ -154,7 +160,7 @@ body {
   width: 100%;
   text-align: center;
 
-  transition: var(--default-opacity-transition);
+  transition: opacity 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
 
   font-weight: bold;
 }
@@ -166,7 +172,7 @@ body {
   width: 100%;
   height: 100%;
 
-  transition: var(--default-opacity-transition);
+  transition: opacity 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
 
   -moz-appearance: none;
   border-width: 0;
@@ -179,8 +185,8 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  height: var(--webview-topbar-height);
-  width: var(--webview-topbar-height);
+  height: 27px;
+  width: 27px;
 
   background-image: url(assets/hamburger.png);
   background-size: 14px 14px;
@@ -223,7 +229,7 @@ body {
   width: 410px;
   transform: translateX(560px); /* larger than sidebar width to hide shadow */
 
-  transition: var(--default-transform-transition);
+  transition: transform 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
 
   background-color: #2E3D4D;
   -x-box-shadow: rgba(0, 0, 0, 0.5) -80px 0 100px; /* WARNING: will slow down animations! (gecko) */
@@ -244,7 +250,7 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: var(--sidebar-toolbar-height);
+  height: 50px;
 
   background-color: #364759;
 }
@@ -267,7 +273,7 @@ body {
 
 .sidebar-toolbar-button {
   height: 100%;
-  width: var(--sidebar-toolbar-height);
+  width: 50px;
 
   transition: background-color 200ms ease-out;
 
@@ -294,7 +300,7 @@ body {
 
 .sidebar-tabs-scrollbox {
   width: 100%;
-  height: calc(100% - var(--sidebar-toolbar-height));
+  height: calc(100% - 50px);
   overflow-y: scroll;
 }
 

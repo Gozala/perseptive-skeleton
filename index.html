@@ -82,8 +82,17 @@
       <button onclick='mode("select-webview")'>select-webview</button>
       <button onclick='mode("edit-webview")'>edit-webview</button>
       <button onclick='mode("create-webview")'>create-webview</button>
+
+      <!-- animation library -->
+      <script src="https://rawgithub.com/lvivski/anima/master/anima.min.js"></script>
+
       <script>
+
         function mode(m) {
+          modeJS(m);
+        }
+
+        function modeCSS(m) {
           document.body.className = 'mode-' + m;
           if (m == 'select-webview') {
             setTimeout(() => {
@@ -94,6 +103,115 @@
             }, 500);
           }
         }
+
+
+        var world = anima.world();
+
+        var animItems = {
+          globalOverlay: world.add(document.querySelector('.global-overlay')),
+          webviewLocalOverLay: world.add(document.querySelector('.webview-local-overlay')),
+          webviewStack: world.add(document.querySelector('.webview-stack')),
+          webview: world.add(document.querySelector('.webview')),
+          webviewTopbarBackground: world.add(document.querySelector('.webview-topbar-background')),
+          webviewCombobar: world.add(document.querySelector('.webview-combobar')),
+          webviewTitleContainer: world.add(document.querySelector('.webview-title-container')),
+          webviewUrlInput: world.add(document.querySelector('.webview-url-input')),
+          sidebar: world.add(document.querySelector('.sidebar')),
+          sidebarToolbarButton: world.add(document.querySelector('.sidebar-toolbar-button')),
+        }
+
+        var initialValues = {
+            sidebarTranslate: 0,
+            webviewStackTranslate: 0,
+            webviewCombobarTransform: 0,
+            webviewTitleContainerTranslate: 0,
+            globalOverlayOpacity: 0,
+            webviewLocalOverLayOpacity: 0,
+            webviewTitleContainerOpacity: 1,
+            webviewUrlInputOpacity: 0,
+        }
+
+        var currentValues = Object.create(initialValues);
+
+        function modeJS(m) {
+
+          var newValues = Object.create(initialValues);
+
+          switch (m) {
+            case 'show-tabs':
+              newValues.globalOverlayOpacity = 1;
+              newValues.sidebarTranslate = -560;
+              newValues.webviewStackTranslate = -600;
+              break;
+            default:
+              break;
+          }
+
+          var d;
+
+          d = newValues.globalOverlayOpacity;
+          animItems.globalOverlay.animate({ opacity: d }, 400);
+
+          d = newValues.webviewLocalOverLayOpacity;
+          animItems.webviewLocalOverLay.animate({ opacity: d }, 400);
+
+          d = newValues.webviewStackTranslate - currentValues.webviewStackTranslate;
+          animItems.webviewStack.animate({ translate: [0, 0, d] }, 400);
+
+          d = newValues.sidebarTranslate - currentValues.sidebarTranslate;
+          animItems.sidebar.animate({ translate: [d, 0, 0]}, 400);
+
+          d = newValues.webviewCombobarTransform - currentValues.webviewCombobarTransform;
+          animItems.webviewCombobar.animate({ transform: [0, d, 0] }, 400);
+
+          d = newValues.webviewUrlInputOpacity;
+          animItems.webviewUrlInput.animate({ opacity: d}, 400);
+
+          d = newValues.webviewTitleContainerOpacity;
+          animItems.webviewTitleContainer.animate({ opacity: d }, 400);
+
+          currentValues = Object.create(newValues);
+
+        }
+
+        /*
+
+          show-webview
+
+          create-webview
+
+          show-tabs
+            globalOverlay: opacity
+            sidebar: translate
+            webviewStack: translate
+
+          edit-webview
+            webviewLocalOverLay: opacity
+            webviewTitleContainer: transform
+            webviewCombobar: transform
+            webviewTitleContainer: opacity
+            webviewUrlInput: opacity
+
+           select-webview
+            webviewStack: transform3d:-600px
+
+
+         */
+
+
+        function modeShowTabs(fwd) {
+          animItems.sidebar.animate({
+            translate: fwd ? [-560,0,0] : [0,0,0],
+            duration: 400,
+            ease: 'ease-in-out-quad'
+          });
+          animItems.globalOverlay.animate({
+            opacity: fwd ? 1 : 0,
+            duration: 400,
+            ease: 'ease-in-out-quad'
+          });
+        }
+
       </script>
     </div>
 
